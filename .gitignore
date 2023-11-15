@@ -2,3 +2,5 @@
 *.csv
 /_*
 *.log
+*.mp4
+/presets.json
