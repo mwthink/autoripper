@@ -8,15 +8,15 @@ Ripping is done via MakeMKV. Encoding is done via Handbrake.
 - Automates encoding DVD backups via Handbrake
 
 ## Usage
-Encode existing disc rip
-```sh
-preset_file="presets.json" preset_name="DS9DVDRIP" \
-./autoripper.sh dvd.iso
-```
-
 Rip disc from drive
 ```sh
 ./autoripper.sh rip
+```
+
+Encode existing disc rip
+```sh
+preset_file="presets.json" preset_name="DS9DVDRIP" \
+./autoripper.sh encode dvd.iso
 ```
 
 
