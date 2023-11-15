@@ -70,5 +70,19 @@ function backupdisc(){
   echo "${disc_title},${file_bytes},${elapsed_seconds},${file_hash},${output_path},${min_length},${cache_size},${use_directio}"
 }
 
+function encode_disc(){
+  output_path="backup/DS9S6D1.iso"
+  preset_file="$HOME/autoripper/_DS9-HQ-DVD.json"
+  # Scan input file and extract the JSON info through terrible regex parsing
+  # Get JSON output; then extract everything from the line with "JSON Title Set:"; then remove all newlines; then remove first 16 characters, pipe to jq
+  title_json=$(handbrakecli --json -i ${output_path} --scan --title 0 | sed -ne '/JSON Title Set/,$ p' | tr -d '\n' | cut -c16- | jq -cr)
+
+  # Loop through the indexes of titles we are interested in
+  for tIndex in $(echo $title_json | jq -cr '.TitleList[].Index'); do
+    echo handbrakecli --preset-import-file ${preset_file} --preset \"$(cat $preset_file | jq -cr '.PresetList[0].PresetName')\" -i ${output_path} -o $(basename ${output_path} .iso)-t${tIndex}.mp4
+  done
+}
+
 backupdisc
 eject_disc_tray
+# encode_disc
